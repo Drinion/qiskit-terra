@@ -47,7 +47,7 @@ _filter_deprecation_warnings()
 
 
 def deprecate_arguments(kwarg_map):
-    """Decorator to automatically alias deprecated agrument names and warn upon use."""
+    """Decorator to automatically alias deprecated argument names and warn upon use."""
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -58,11 +58,12 @@ def deprecate_arguments(kwarg_map):
     return decorator
 
 
-def deprecate_function(msg):
+def deprecate_function(msg, stacklevel=2):
     """Emit a warning prior to calling decorated function.
 
     Args:
         msg (str): Warning message to emit.
+        stacklevel (int): The warning stackevel to use, defaults to 2.
 
     Returns:
         Callable: The decorated, deprecated callable.
@@ -72,7 +73,7 @@ def deprecate_function(msg):
         def wrapper(*args, **kwargs):
             # warn only once
             if not wrapper._warned:
-                warnings.warn(msg, DeprecationWarning, stacklevel=2)
+                warnings.warn(msg, DeprecationWarning, stacklevel=stacklevel)
                 wrapper._warned = True
             return func(*args, **kwargs)
         wrapper._warned = False
